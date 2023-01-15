@@ -8,18 +8,25 @@ import (
 )
 
 // CreateUser creates user with the given mail and password.
-func CreateUser(mail, password string) (*ent.User, error) {
-	user, err := EntClient.User.Create().
+func CreateUser(mail, password string) error {
+
+	_, err := GetUserByMail(mail)
+	// if user already existed then no need to add again
+	if err == nil {
+		return err
+	}
+
+	err = EntClient.User.Create().
 		SetMail(mail).
 		SetPassword(password).
 		SetCreatedAt(time.Now()).
-		Save(context.Background())
+		Exec(context.Background())
 
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return user, nil
+	return nil
 }
 
 // GetUserByMail gets user by mail.

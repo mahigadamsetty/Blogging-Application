@@ -2,6 +2,7 @@ package database
 
 import (
 	"blog1/ent"
+	"blog1/ent/migrate"
 	"context"
 
 	_ "github.com/lib/pq"
@@ -22,7 +23,7 @@ func init() {
 		panic(err)
 	}
 
-	if err := client.Schema.Create(context.Background()); err != nil {
+	if err := client.Schema.Create(context.Background(), migrate.WithGlobalUniqueID(true)); err != nil {
 		panic(err)
 	}
 
@@ -37,7 +38,7 @@ func init() {
 	}
 
 	// Seeding the admin's credentials
-	_, err = CreateUser(mail, string(hashedPassword))
+	err = CreateUser(mail, string(hashedPassword))
 	if err != nil {
 		panic(err)
 	}
