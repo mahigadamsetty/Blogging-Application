@@ -11,7 +11,7 @@ func main() {
 
 	g := gin.Default()
 
-	protected := g.Group("/v2")
+	protected := g.Group("/")
 	protected.Use(middleware.JwtAuthMiddleware())
 
 	// register the protected routes that needs authorization
@@ -19,7 +19,7 @@ func main() {
 	protected.DELETE("/post/:id", handler.HandleDeletePost)
 	protected.PATCH("/post/:id", handler.HandleUpdatePost)
 
-	public := g.Group("/v1")
+	public := g.Group("/")
 
 	// register the public routes that doesn't need authorization
 	public.GET("/post", handler.HandleGetAllPosts)
